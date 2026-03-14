@@ -50,7 +50,7 @@ const EmailVerify = () => {
                 navigate('/');
             }
             else {
-                toast.error(data.message)
+                toast.error(data.error || 'Verification failed');
             }
         } catch (error) {
             toast.error(error.message)
