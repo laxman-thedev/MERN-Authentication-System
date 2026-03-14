@@ -14,7 +14,7 @@ import { EMAIL_VERIFY_TEMPLATE, PASSWORD_RESET_TEMPLATE } from '../config/emailT
 export const register = async (req, res) => {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
-        return res.status(400).json({ error: 'All fields are required', success: false });
+        return res.json({ error: 'All fields are required', success: false });
     }
 
     try {
@@ -104,7 +104,7 @@ export const sendVerifyOtp = async (req, res) => {
     try {
         const user = await userModel.findById(req.userId);
         if (!user) return res.status(404).json({ error: 'User not found', success: false });
-        if (user.isVerified) return res.status(400).json({ error: 'User already verified', success: false });
+        if (user.isVerified) return res.json({ error: 'User already verified', success: false });
 
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
         user.verifyOtp = otp;
@@ -132,8 +132,8 @@ export const verifyEmail = async (req, res) => {
         const { otp } = req.body;
         const user = await userModel.findById(req.userId);
         if (!user) return res.status(404).json({ error: 'User not found', success: false });
-        if (user.verifyOtp !== otp || user.verifyOtp === '') return res.status(400).json({ error: 'Invalid OTP', success: false });
-        if (user.verifyOtpExpiresAt < Date.now()) return res.status(400).json({ error: 'OTP has expired', success: false });
+        if (user.verifyOtp !== otp || user.verifyOtp === '') return res.json({ error: 'Invalid OTP', success: false });
+        if (user.verifyOtpExpiresAt < Date.now()) return res.json({ error: 'OTP has expired', success: false });
 
         user.isVerified = true;
         user.verifyOtp = '';
@@ -167,11 +167,11 @@ export const isAuthenticated = async (req, res) => {
 // -----------------------
 export const sendResetOtp = async (req, res) => {
     const { email } = req.body;
-    if (!email) return res.status(400).json({ error: 'Email is required', success: false });
+    if (!email) return res.json({ error: 'Email is required', success: false });
 
     try {
         const user = await userModel.findOne({ email });
-        if (!user) return res.status(404).json({ error: 'User not found', success: false });
+        if (!user) return res.json({ error: 'User not found', success: false });
 
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
         user.resetOtp = otp;
@@ -197,14 +197,14 @@ export const sendResetOtp = async (req, res) => {
 export const resetPassword = async (req, res) => {
     const { email, otp, newPassword } = req.body;
     if (!email || !otp || !newPassword) {
-        return res.status(400).json({ error: 'Email, OTP and new password are required', success: false });
+        return res.json({ error: 'Email, OTP and new password are required', success: false });
     }
 
     try {
         const user = await userModel.findOne({ email });
-        if (!user) return res.status(404).json({ error: 'User not found', success: false });
-        if (user.resetOtp !== otp || user.resetOtp === '') return res.status(400).json({ error: 'Invalid OTP', success: false });
-        if (user.resetOtpExpiresAt < Date.now()) return res.status(400).json({ error: 'OTP has expired', success: false });
+        if (!user) return res.json({ error: 'User not found', success: false });
+        if (user.resetOtp !== otp || user.resetOtp === '') return res.json({ error: 'Invalid OTP', success: false });
+        if (user.resetOtpExpiresAt < Date.now()) return res.json({ error: 'OTP has expired', success: false });
 
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         user.password = hashedPassword;
