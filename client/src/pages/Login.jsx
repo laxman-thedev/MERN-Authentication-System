@@ -31,7 +31,7 @@ const Login = () => {
                     getUserData();
                     navigate('/');
                 } else {
-                    toast.error(data.message);
+                    toast.warn(data.error);
                 }
             } else {
                 // Login existing user
