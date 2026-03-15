@@ -4,7 +4,7 @@ import Header from '../components/Header'
 
 const Home = () => {
     return (
-        <div>
+        <div className='flex flex-col items-center justify-center min-h-screen bg-[url("/bg_img.png")] bg-center  bg-cover'>
             {/* Navigation bar */}
             <NavBar />
             {/* Hero section */}
