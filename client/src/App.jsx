@@ -8,6 +8,7 @@ import ResetPassword from "./pages/ResetPassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
   const [isLoggedin, setIsLoggedin] = useState(false);
@@ -53,6 +54,9 @@ const App = () => {
           path="/reset-password"
           element={isLoggedin ? <Navigate to="/" /> : <ResetPassword />}
         />
+
+        {/* 404 route */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );
